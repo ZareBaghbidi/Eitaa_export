@@ -13,6 +13,70 @@ const MEDIA_TYPES = [
   { id: "gif", label: "GIFs", icon: "i-gif" },
 ];
 
+const COPY = [
+  ["Search chats", "جست‌وجوی گفتگوها"], ["Paste a link, @username, or ID", "پیوند، @نام‌کاربری یا شناسه را وارد کنید"],
+  ["Refresh chats", "تازه‌سازی گفتگوها"], ["Sign out", "خروج"], ["Profile", "پروفایل"],
+  ["Switch language", "تغییر زبان"], ["Toggle theme", "تغییر تم"], ["Back", "بازگشت"], ["Close", "بستن"],
+  ["Go", "برو"], ["Continue", "ادامه"], ["Everything, saved", "گفتگوهایت را"],
+  ["exactly as it happened.", "همیشه در دسترس نگه دار"],
+  ["Choose a chat on the left — or paste any channel link, invite link, @username, or peer ID. Pick the media you want, set a size limit, and watch every file download.", "یک گفتگو را از فهرست انتخاب کن یا پیوند کانال، گروه، دعوت، نام کاربری یا شناسه را وارد کن. پیام‌ها و رسانه‌های موردنیازت را انتخاب کن و روند ذخیره‌سازی را ببین."],
+  ["Every media type", "همهٔ رسانه‌ها"], ["Photos, video, voice, files, stickers and GIFs.", "عکس، ویدیو، صدا، فایل، استیکر و GIF"],
+  ["Live file progress", "نمایش روند ذخیره‌سازی"], ["A 0–100% bar for each file, plus an overall bar.", "درصد پیشرفت هر فایل و کل خروجی"],
+  ["messages.html, css, js, photos and thumbnails.", "پیام‌ها، رسانه‌ها و اطلاعات فرستنده‌ها"],
+  ["Export target", "مقصد خروجی"], ["Check", "بررسی"], ["What to export", "محتوای خروجی"],
+  ["Text messages are always included. Pick the media you need.", "پیام‌های متنی همیشه ذخیره می‌شوند. رسانه‌های موردنیاز را انتخاب کن."],
+  ["All", "همه"], ["None", "هیچ‌کدام"], ["Limits", "محدودیت‌ها"],
+  ["Keep downloads small, or take everything.", "حجم دریافت را کنترل کن یا همه‌چیز را ذخیره کن."],
+  ["Max size per file", "بیشترین حجم هر فایل"], ["0 = unlimited. Larger files are kept as placeholders.", "۰ یعنی بدون محدودیت. فایل‌های بزرگ‌تر فقط به‌صورت جای‌نگهدار ثبت می‌شوند."],
+  ["Total download budget", "مجموع حجم دریافت"], ["0 = unlimited. Remaining media is skipped, not failed.", "۰ یعنی بدون محدودیت. رسانه‌های اضافه رد می‌شوند."],
+  ["Newest messages", "تعداد پیام‌های آخر"], ["All messages", "همهٔ پیام‌ها"], ["Leave empty to fetch the complete history.", "برای دریافت همهٔ پیام‌ها خالی بگذار."],
+  ["Timezone", "منطقهٔ زمانی"], ["Used for dates and file names.", "برای تاریخ‌ها و نام فایل‌ها استفاده می‌شود."],
+  ["Date range", "بازهٔ زمانی"], ["Optional. Leave blank for the full history.", "اختیاری؛ برای کل تاریخچه خالی بگذار."],
+  ["From", "از"], ["To", "تا"], ["Options", "تنظیمات"], ["Fine-tune the archive.", "جزئیات خروجی را تنظیم کن."],
+  ["Output folder", "نام پوشهٔ خروجی"], ["auto", "خودکار"],
+  ["Created inside your export root. Reusing a name resumes existing files.", "پوشه داخل مسیر خروجی ساخته می‌شود. استفاده از نام قبلی فایل‌ها را ادامه می‌دهد."],
+  ["Output theme", "تم فایل خروجی"], ["Choose the appearance of the archive page.", "ظاهر صفحهٔ آرشیو را انتخاب کن."], ["Light", "روشن"], ["Dark", "تاریک"],
+  ["Add “created” event", "افزودن رویداد ساخت"], ["Adds a service message at the channel creation date.", "در تاریخ ایجاد کانال یا گروه یک پیام سیستمی درج می‌کند."],
+  ["Join invite link if needed", "پیوستن به پیوند دعوت در صورت نیاز"], ["Joins the group/channel before exporting.", "پیش از خروجی گرفتن به گروه یا کانال می‌پیوندد."],
+  ["Start export", "شروع خروجی"], ["Activity", "گزارش فعالیت"], ["History fetch, downloads, and rendering.", "دریافت پیام‌ها، رسانه‌ها و ساخت آرشیو."],
+  ["Waiting for the first file…", "در انتظار نخستین فایل…"], ["Export", "خروجی"], ["Running", "در حال انجام"],
+  ["Starting…", "در حال شروع…"], ["Export completed", "خروجی کامل شد"], ["Open export", "باز کردن خروجی"],
+  ["Export another", "خروجی دیگری بگیر"], ["Cancel export", "لغو خروجی"], ["Back to chat", "بازگشت به گفتگو"],
+  ["Sign in to Eitaa", "ورود به ایتا"], ["Use your phone number. Eitaa will send a verification code.", "شمارهٔ تلفنت را وارد کن؛ کد تأیید از طرف ایتا ارسال می‌شود."],
+  ["Phone number", "شمارهٔ تلفن"], ["Verification code", "کد تأیید"], ["Verify & sign in", "تأیید و ورود"],
+  ["Resend code", "ارسال دوباره"], ["Change number", "تغییر شماره"], ["The session stays on this computer.", "نشست کاربری روی همین رایانه می‌ماند."],
+  ["Phone", "تلفن"], ["Session", "نشست"], ["Stored locally", "ذخیره‌شده روی دستگاه"], ["No public username", "نام کاربری عمومی ندارد"],
+  ["Photos", "عکس‌ها"], ["Videos", "ویدیوها"], ["Voice", "پیام صوتی"], ["Audio", "صوت"], ["Files", "فایل‌ها"], ["Stickers", "استیکرها"], ["GIFs", "GIFها"],
+  ["Supergroup", "ابرگروه"], ["Group", "گروه"], ["Channel", "کانال"], ["Private chat", "گفتگوی خصوصی"], ["Chat", "گفتگو"],
+  ["No chats found", "گفتگویی پیدا نشد"], ["Try a different search, or paste a link in the welcome screen.", "جست‌وجوی دیگری را امتحان کن یا پیوندی را در صفحهٔ آغاز وارد کن."],
+  ["Could not load chats", "بارگذاری گفتگوها ناموفق بود"], ["Invite link — join required", "پیوند دعوت — نیازمند پیوستن"], ["Ready to export", "آمادهٔ خروجی گرفتن"],
+  ["Paste a link, @username, or peer reference first.", "ابتدا پیوند، @نام‌کاربری یا شناسه را وارد کن."], ["Enter or select an export target.", "مقصد خروجی را وارد یا انتخاب کن."],
+  ["Start date must be earlier than end date.", "تاریخ شروع باید پیش از تاریخ پایان باشد."], ["Message limit must be a positive number.", "تعداد پیام باید عددی مثبت باشد."],
+  ["An export is running. Cancel it or wait for it to finish.", "یک خروجی در حال انجام است. آن را لغو کن یا تا پایانش صبر کن."],
+  ["An export is still running. Cancel it first or wait.", "خروجی هنوز در حال انجام است. ابتدا آن را لغو کن یا منتظر بمان."],
+  ["Cancel the active export before signing out.", "پیش از خروج از حساب، خروجی فعال را لغو کن."], ["Sign out of this Eitaa session?", "از این حساب ایتا خارج می‌شوی؟"],
+  ["Signed out.", "از حساب خارج شدی."], ["A new code was requested.", "کد تازه درخواست شد."], ["Enter your phone number.", "شمارهٔ تلفن را وارد کن."],
+  ["Enter the verification code.", "کد تأیید را وارد کن."], ["Enter the verification code to finish signing in.", "برای پایان ورود، کد تأیید را وارد کن."],
+  ["Sending code…", "در حال ارسال کد…"], ["Signing in…", "در حال ورود…"], ["Checking…", "در حال بررسی…"], ["Starting…", "در حال شروع…"],
+  ["Starting", "در حال شروع"], ["Fetching history", "دریافت تاریخچه"], ["Downloading media", "دریافت رسانه‌ها"], ["Rendering archive", "ساخت آرشیو"],
+  ["Completed", "کامل شد"], ["Failed", "ناموفق"], ["Cancelled", "لغوشده"], ["Working…", "در حال انجام…"],
+  ["Messages", "پیام‌ها"], ["Photos", "عکس‌ها"], ["Videos", "ویدیوها"], ["Files", "فایل‌ها"], ["Voice", "صوت"], ["Stickers", "استیکرها"], ["Media size", "حجم رسانه‌ها"], ["Events", "رویدادها"],
+  ["Text only", "فقط متن"], ["no media will be downloaded", "رسانه‌ای دریافت نمی‌شود"], ["selected", "انتخاب شد"], ["media types selected", "نوع رسانه انتخاب شد"],
+  ["Eitaa account", "حساب ایتا"], ["Profile name", "نام نمایه"],
+  ["Sign out of account", "خروج از حساب"],
+  ["Cannot reach the local Eitaa Export server. Is `eitaa-export gui` running?", "ارتباط با برنامه برقرار نشد. مطمئن شو رابط Eitaa Export در حال اجراست."],
+  ["Something went wrong.", "خطایی رخ داد."],
+  ["Cancel this export? Partial files will remain on disk.", "این خروجی لغو شود؟ فایل‌های ناقص روی دیسک می‌مانند."],
+  ["Cancellation requested.", "درخواست لغو ارسال شد."], ["Export started.", "خروجی شروع شد."], ["Welcome, signed in.", "خوش آمدی."],
+  ["Eitaa conversation archives", "آرشیو گفتگوهای ایتا"], ["Complete conversation preview", "پیش‌نمایش کامل گفتگو"],
+  ["https://eitaa.com/… or @channel", "https://eitaa.com/… یا @channel"],
+  ["You can choose either light or dark for the archive.", "ظاهر صفحهٔ آرشیو را انتخاب کن."],
+  ["Add the creation event", "افزودن رویداد ساخت"], ["Join an invite link if needed", "پیوستن به پیوند دعوت در صورت نیاز"],
+  ["The export folder is inside the root. Reusing a name resumes existing files.", "پوشه داخل مسیر خروجی ساخته می‌شود. استفاده از نام قبلی فایل‌ها را ادامه می‌دهد."],
+  ["Maximum size per file", "بیشترین حجم هر فایل"], ["Total download size", "مجموع حجم دریافت"],
+  ["Username", "نام کاربری"], ["ID", "شناسه"],
+];
+
 const state = {
   authenticated: false,
   me: null,
@@ -27,7 +91,56 @@ const state = {
   toastTimer: null,
   resendTimer: null,
   exportRoot: "",
+  language: "fa",
 };
+
+function translated(value, language = state.language) {
+  const text = String(value ?? "");
+  const leading = text.match(/^\s*/)?.[0] || "";
+  const trailing = text.match(/\s*$/)?.[0] || "";
+  const clean = text.slice(leading.length, text.length - trailing.length).replace(/\s+/g, " ").trim();
+  for (const [english, persian] of COPY) {
+    if (language === "en" && clean === persian) return `${leading}${english}${trailing}`;
+    if (language === "fa" && clean === english) return `${leading}${persian}${trailing}`;
+  }
+  return text;
+}
+
+function localizeTree(root = document.body) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  let node;
+  while ((node = walker.nextNode())) {
+    if (node.parentElement?.closest("script, style, .chat-title, .chat-preview, .me-name, .me-handle, #profileName, #profileUsername, #resultPath, .event-text")) continue;
+    node.nodeValue = translated(node.nodeValue);
+  }
+  const elements = root.matches?.("input, button, a, option") ? [root, ...root.querySelectorAll("input, button, a, option")] : root.querySelectorAll?.("input, button, a, option") || [];
+  for (const element of elements) {
+    for (const attr of ["placeholder", "title", "aria-label"]) {
+      if (element.hasAttribute(attr)) element.setAttribute(attr, translated(element.getAttribute(attr)));
+    }
+  }
+}
+
+function applyLanguage(language) {
+  state.language = language === "en" ? "en" : "fa";
+  document.documentElement.lang = state.language;
+  document.documentElement.dir = state.language === "fa" ? "rtl" : "ltr";
+  try { localStorage.setItem("eitaa-language", state.language); } catch (error) { /* ignore */ }
+  localizeTree();
+  const button = $("#languageBtn");
+  button.textContent = state.language === "fa" ? "EN" : "فا";
+  button.title = state.language === "fa" ? "Switch language" : "تغییر زبان";
+  if (state.me) {
+    renderMe();
+    if (!$("#profileOverlay").hidden) openProfile();
+  }
+  if (state.chats.length) renderChats();
+  if (state.selected) {
+    $("#selSub").textContent = state.selected.username ? `@${state.selected.username}` : kindLabel(state.selected.kind);
+    $("#selKind").textContent = kindLabel(state.selected.kind);
+  }
+  updateEstimate();
+}
 
 /* ------------------------------------------------------------------ utils */
 
@@ -78,15 +191,15 @@ function formatListTime(timestamp) {
   const date = new Date(timestamp * 1000);
   const now = new Date();
   if (date.toDateString() === now.toDateString()) {
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    return date.toLocaleTimeString(state.language === "fa" ? "fa-IR" : "en-US", { hour: "2-digit", minute: "2-digit" });
   }
   const sameYear = date.getFullYear() === now.getFullYear();
-  return date.toLocaleDateString([], { day: "2-digit", month: "short", year: sameYear ? undefined : "2-digit" });
+  return date.toLocaleDateString(state.language === "fa" ? "fa-IR" : "en-US", { day: "2-digit", month: "short", year: sameYear ? undefined : "2-digit" });
 }
 
 function formatClock(timestamp) {
   const date = new Date(timestamp * 1000);
-  return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  return date.toLocaleTimeString(state.language === "fa" ? "fa-IR" : "en-US", { hour: "2-digit", minute: "2-digit" });
 }
 
 function kindIcon(kind) {
@@ -96,11 +209,11 @@ function kindIcon(kind) {
 }
 
 function kindLabel(kind) {
-  if (kind === "supergroup") return "Supergroup";
-  if (kind === "group") return "Group";
-  if (kind === "channel") return "Channel";
-  if (kind === "private") return "Private chat";
-  return "Chat";
+  if (kind === "supergroup") return translated("Supergroup");
+  if (kind === "group") return translated("Group");
+  if (kind === "channel") return translated("Channel");
+  if (kind === "private") return translated("Private chat");
+  return translated("Chat");
 }
 
 function paintAvatar(element, name, color = 1, kind = null, sizeClass = "") {
@@ -116,7 +229,7 @@ function paintAvatar(element, name, color = 1, kind = null, sizeClass = "") {
 
 function toast(message, type = "") {
   const element = $("#toast");
-  element.textContent = message;
+  element.textContent = translated(message);
   element.className = `toast show ${type}`.trim();
   clearTimeout(state.toastTimer);
   state.toastTimer = setTimeout(() => {
@@ -125,7 +238,7 @@ function toast(message, type = "") {
 }
 
 function errorMessage(error) {
-  const message = error?.message || "Something went wrong.";
+  const message = translated(error?.message || "Something went wrong.");
   const wait = error?.data?.retry_after_seconds;
   return wait ? `${message} Try again in ${wait}s.` : message;
 }
@@ -135,7 +248,7 @@ function setBusy(button, busy, text) {
   if (busy) {
     button.dataset.label = button.innerHTML;
     button.disabled = true;
-    button.innerHTML = `<span class="spinner"></span>${escapeHtml(text || "Working…")}`;
+    button.innerHTML = `<span class="spinner"></span>${escapeHtml(translated(text || "Working…"))}`;
   } else {
     button.disabled = false;
     if (button.dataset.label) button.innerHTML = button.dataset.label;
@@ -154,7 +267,7 @@ async function api(path, options = {}) {
   try {
     response = await fetch(path, init);
   } catch (error) {
-    throw new Error("Cannot reach the local Eitaa Export server. Is `eitaa-export gui` running?");
+    throw new Error(translated("Cannot reach the local Eitaa Export server. Is `eitaa-export gui` running?"));
   }
   let data = {};
   try {
@@ -185,6 +298,7 @@ function applyTheme(theme) {
   }
   const button = $("#themeBtn");
   if (button) button.innerHTML = icon(theme === "dark" ? "i-sun" : "i-moon");
+  if (button) button.title = state.language === "fa" ? "تغییر تم" : "Toggle theme";
 }
 
 function toggleTheme() {
@@ -246,10 +360,11 @@ async function requestCode(event) {
     state.auth.delivery = challenge.delivery;
     $("#phoneForm").hidden = true;
     $("#codeForm").hidden = false;
-    $("#codeTarget").textContent =
-      `Code sent to ${challenge.phone_number}` +
-      (challenge.delivery ? ` via ${challenge.delivery}` : "") +
-      (challenge.timeout_seconds ? ` · valid for ${challenge.timeout_seconds}s` : "");
+    const delivery = challenge.delivery ? (state.language === "fa" ? ` از طریق ${challenge.delivery}` : ` via ${challenge.delivery}`) : "";
+    const validity = challenge.timeout_seconds ? (state.language === "fa" ? ` · اعتبار ${challenge.timeout_seconds} ثانیه` : ` · valid for ${challenge.timeout_seconds}s`) : "";
+    $("#codeTarget").textContent = state.language === "fa"
+      ? `کد به ${challenge.phone_number} ارسال شد${delivery}${validity}`
+      : `Code sent to ${challenge.phone_number}${delivery}${validity}`;
     $("#authSubtitle").textContent = "Enter the verification code to finish signing in.";
     $("#codeInput").value = "";
     setTimeout(() => $("#codeInput").focus(), 80);
@@ -298,7 +413,7 @@ async function verifyCode(event) {
     } else {
       showWelcome();
     }
-    toast(`Welcome, ${state.me?.name || "signed in"}.`, "success");
+    toast(state.language === "fa" ? `خوش آمدی، ${state.me?.name || ""}.` : `Welcome, ${state.me?.name || "signed in"}.`, "success");
   } catch (error) {
     showAuthError(errorMessage(error));
   } finally {
@@ -324,7 +439,7 @@ async function resendCode() {
     showAuthError(errorMessage(error));
     button.disabled = false;
   }
-  if (started) startResendCooldown();
+    if (started) startResendCooldown();
 }
 
 function startResendCooldown(seconds = 30) {
@@ -332,15 +447,15 @@ function startResendCooldown(seconds = 30) {
   const button = $("#resendBtn");
   let remaining = seconds;
   button.disabled = true;
-  button.textContent = `Resend in ${remaining}s`;
+  button.textContent = state.language === "fa" ? `ارسال دوباره پس از ${remaining} ثانیه` : `Resend in ${remaining}s`;
   state.resendTimer = setInterval(() => {
     remaining -= 1;
     if (remaining <= 0) {
       clearInterval(state.resendTimer);
       button.disabled = false;
-      button.textContent = "Resend code";
+      button.textContent = translated("Resend code");
     } else {
-      button.textContent = `Resend in ${remaining}s`;
+      button.textContent = state.language === "fa" ? `ارسال دوباره پس از ${remaining} ثانیه` : `Resend in ${remaining}s`;
     }
   }, 1000);
 }
@@ -360,7 +475,7 @@ async function logout() {
     toast("Cancel the active export before signing out.", "error");
     return;
   }
-  if (!confirm("Sign out of this Eitaa session?")) return;
+  if (!confirm(translated("Sign out of this Eitaa session?"))) return;
   try {
     await api("/api/auth/logout", { method: "POST", body: {} });
     signedOut();
@@ -386,7 +501,7 @@ function renderMe() {
     <span class="avatar avatar-sm c${me.color || 1}"><span class="avatar-text">${escapeHtml(me.initials || initials(me.name))}</span></span>
     <span class="me-copy">
       <span class="me-name">${escapeHtml(me.name)}</span>
-      <span class="me-handle">${me.username ? "@" + escapeHtml(me.username) : escapeHtml(me.phone || "Eitaa account")}</span>
+      <span class="me-handle">${me.username ? "@" + escapeHtml(me.username) : escapeHtml(me.phone || translated("Eitaa account"))}</span>
     </span>
   `;
 }
@@ -396,7 +511,7 @@ function openProfile() {
   const me = state.me;
   paintAvatar($("#profileAvatar"), me.name, me.color, null, "avatar-xl");
   $("#profileName").textContent = me.name;
-  $("#profileUsername").textContent = me.username ? `@${me.username}` : "No public username";
+  $("#profileUsername").textContent = me.username ? `@${me.username}` : translated("No public username");
   $("#profilePhone").textContent = me.phone || "—";
   $("#profileNameTag").textContent = me.profile || "default";
   $("#profileOverlay").hidden = false;
@@ -589,13 +704,15 @@ function updateEstimate() {
   const estimate = $("#estimate");
   if (!estimate) return;
   if (!selected.length) {
-    estimate.innerHTML = "<b>Text only</b> · no media will be downloaded";
+    estimate.innerHTML = `<b>${translated("Text only")}</b> · ${translated("no media will be downloaded")}`;
     return;
   }
   const maxFile = Number($("#maxFile").value || 0);
   const unit = Number($("#maxFileUnit").value || 1048576);
   const maxLabel = maxFile > 0 ? ` · max ${formatBytes(maxFile * unit)}/file` : "";
-  estimate.innerHTML = `<b>${selected.length}</b> media type${selected.length === 1 ? "" : "s"} selected${maxLabel}`;
+  estimate.innerHTML = state.language === "fa"
+    ? `<b>${selected.length}</b> نوع رسانه انتخاب شد${maxLabel}`
+    : `<b>${selected.length}</b> media type${selected.length === 1 ? "" : "s"} selected${maxLabel}`;
 }
 
 function numberField(selector) {
@@ -625,6 +742,7 @@ function collectExportRequest() {
     since,
     until,
     timezone: $("#timezoneInput").value.trim() || "Asia/Tehran",
+    output_theme: $("#outputTheme").value || "light",
     include_created: $("#createdInput").checked,
     join: $("#joinInput").checked,
   };
@@ -816,7 +934,7 @@ async function loadJob(jobId) {
 
 async function cancelExport() {
   if (!state.job) return;
-  if (!confirm("Cancel this export? Partial files will remain on disk.")) return;
+  if (!confirm(translated("Cancel this export? Partial files will remain on disk."))) return;
   const button = $("#cancelBtn");
   setBusy(button, true, "Cancelling…");
   try {
@@ -850,8 +968,20 @@ function backToExport() {
 /* -------------------------------------------------------------------- init */
 
 async function init() {
+  let savedLanguage = document.documentElement.lang || "fa";
+  try { savedLanguage = localStorage.getItem("eitaa-language") || savedLanguage; } catch (error) { /* ignore */ }
+  applyLanguage(savedLanguage);
+  const translatorObserver = new MutationObserver((records) => {
+    for (const record of records) {
+      for (const added of record.addedNodes) {
+        if (added.nodeType === Node.TEXT_NODE) added.nodeValue = translated(added.nodeValue);
+        else if (added.nodeType === Node.ELEMENT_NODE) localizeTree(added);
+      }
+    }
+  });
+  translatorObserver.observe(document.body, { childList: true, subtree: true });
   const themeParam = new URLSearchParams(location.search).get("theme");
-  applyTheme(themeParam === "light" || themeParam === "dark" ? themeParam : document.documentElement.dataset.theme || "dark");
+  applyTheme(themeParam === "light" || themeParam === "dark" ? themeParam : document.documentElement.dataset.theme || "light");
   renderMediaTypes();
   updateEstimate();
   bindEvents();
@@ -898,6 +1028,7 @@ async function init() {
 
 function bindEvents() {
   $("#themeBtn").addEventListener("click", toggleTheme);
+  $("#languageBtn").addEventListener("click", () => applyLanguage(state.language === "fa" ? "en" : "fa"));
   $("#profileBtn").addEventListener("click", openProfile);
   $("#meRow").addEventListener("click", openProfile);
   $("#logoutBtn").addEventListener("click", logout);

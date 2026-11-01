@@ -5,12 +5,12 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "eitaa-export"
 version = "1.2.0"
-description = "Export full Eitaa chats, groups, and channels to a Telegram-style HTML archive, with a CLI and a local web GUI."
+description = "Export Eitaa chats, groups, and channels as offline HTML archives, with a CLI and local web interface."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "Eitaa Export contributors" }]
-keywords = ["eitaa", "export", "archive", "telegram", "html"]
+keywords = ["eitaa", "export", "archive", "html"]
 classifiers = [
   "Environment :: Console",
   "Programming Language :: Python :: 3",
@@ -49,6 +49,9 @@ eitaa_export = [
   "web/*.html",
   "web/*.css",
   "web/*.js",
+  "web/*.svg",
+  "web/fonts/*.ttf",
+  "web/fonts/*.txt",
 ]
 
 [tool.pytest.ini_options]

@@ -1,4 +1,4 @@
-"""Generate the small UI icons used by the Telegram-style export CSS.
+"""Generate the small UI icons used by the Eitaa archive stylesheet.
 
 Run with:  python scripts/generate_icons.py
 """

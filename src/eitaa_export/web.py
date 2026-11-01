@@ -696,6 +696,9 @@ class Runtime:
         limit_value = _safe_int(limit, 0) if limit not in (None, "") else 0
         if limit not in (None, "") and limit_value < 1:
             raise ValueError("Message limit must be positive.")
+        output_theme = str(payload.get("output_theme") or "light").lower()
+        if output_theme not in {"light", "dark"}:
+            raise ValueError("Output theme must be light or dark.")
         options = ExportOptions(
             output=output_dir,
             include_media=bool(allowed),
@@ -707,6 +710,7 @@ class Runtime:
             since=since,
             until=until,
             timezone=timezone_name,
+            output_theme=output_theme,
             include_created=bool(payload.get("include_created", True)),
             join_invite=bool(payload.get("join", False)),
             quiet=True,
@@ -944,8 +948,8 @@ class Handler(BaseHTTPRequestHandler):
             if path in {"/", "/index.html"}:
                 self._send_file(_WEB_ROOT / "index.html")
                 return
-            if path == "/favicon.ico":
-                self._send_bytes(b"", "image/x-icon", status=204)
+            if path in {"/favicon.svg", "/favicon.ico"}:
+                self._send_file(_WEB_ROOT / "eitaa.svg")
                 return
             if path.startswith("/static/"):
                 relative = path[len("/static/") :]

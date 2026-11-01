@@ -1,12 +1,13 @@
-"""Telegram-Desktop-compatible HTML rendering."""
+"""Offline HTML rendering for Eitaa message archives."""
 
 from __future__ import annotations
 
 import html
+import json
 from collections.abc import Iterable
 from datetime import UTC, datetime, timedelta, tzinfo
 
-from .models import ChatInfo, MediaInfo, Message
+from .models import ChatInfo, MediaInfo, Message, profile_url
 
 MONTHS = (
     "January",
@@ -118,7 +119,7 @@ def _mime_label(mime: str, file_name: str) -> str:
 
 
 class Renderer:
-    """Render normalized messages as a Telegram-style HTML page."""
+    """Render normalized messages as an Eitaa archive page."""
 
     def __init__(
         self,
@@ -126,25 +127,30 @@ class Renderer:
         messages: Iterable[Message],
         *,
         tz: tzinfo = UTC,
+        theme: str = "light",
     ) -> None:
         self.chat = chat
         self.messages = list(messages)
         self.tz = tz
+        self.theme = theme if theme in {"light", "dark"} else "light"
 
     def local(self, timestamp: int) -> datetime:
         return datetime.fromtimestamp(timestamp, self.tz)
 
     def render(self) -> str:
         history = self._render_history()
+        profile_data = json.dumps(self._profiles(), ensure_ascii=False).replace("<", "\\u003c")
         return (
             "<!DOCTYPE html>\n"
-            "<html>\n"
+            f'<html lang="fa" dir="rtl" data-theme="{self.theme}">\n'
             "\n"
             " <head>\n"
             "\n"
             '  <meta charset="utf-8"/>\n'
-            "<title>Exported Data</title>\n"
+            f"  <title>{_esc(self.chat.title)}</title>\n"
             '  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>\n'
+            '  <meta name="color-scheme" content="light dark"/>\n'
+            '  <link rel="icon" type="image/svg+xml" href="images/eitaa.svg"/>\n'
             "\n"
             '  <link href="css/style.css" rel="stylesheet"/>\n'
             "\n"
@@ -162,8 +168,11 @@ class Renderer:
             "\n"
             '    <div class="content">\n'
             "\n"
-            '     <div class="text bold">\n'
+            '     <div class="archive_brand">\n'
+            '      <img class="archive_logo" src="images/eitaa.svg" alt="Eitaa"/>\n'
+            '      <div class="text bold">\n'
             f"{_esc(self.chat.title)}\n"
+            '      </div>\n'
             "     </div>\n"
             "\n"
             "    </div>\n"
@@ -176,16 +185,50 @@ class Renderer:
             "\n"
             f"{history}"
             "\n"
+            '     <div class="archive_footer">© <a href="https://github.com/zarebaghbidi" target="_blank" rel="noopener noreferrer">By AmirrimA</a></div>\n'
             "    </div>\n"
             "\n"
             "   </div>\n"
             "\n"
             "  </div>\n"
             "\n"
+            f'  <script type="application/json" id="peer_profiles">{profile_data}</script>\n'
+            '  <div class="profile_overlay" id="profile_overlay" hidden onclick="if(event.target===this)CloseProfile()">\n'
+            '   <section class="profile_card" role="dialog" aria-modal="true" aria-labelledby="profile_name">\n'
+            '    <button class="profile_close" type="button" aria-label="Close" onclick="CloseProfile()">×</button>\n'
+            '    <div class="profile_avatar" id="profile_avatar"></div>\n'
+            '    <h2 id="profile_name"></h2>\n'
+            '    <p class="profile_username" id="profile_username"></p>\n'
+            '    <p class="profile_about" id="profile_about" hidden></p>\n'
+            '    <div class="profile_details"><span id="profile_kind"></span><span id="profile_id"></span></div>\n'
+            '    <div class="profile_badges" id="profile_badges"></div>\n'
+            '    <a class="profile_open" id="profile_open" href="#" target="_blank" rel="noopener noreferrer">Open profile in Eitaa</a>\n'
+            '   </section>\n'
+            '  </div>\n'
             " </body>\n"
             "\n"
             "</html>\n"
         )
+
+    def _profiles(self) -> dict[str, dict[str, object]]:
+        profiles: dict[str, dict[str, object]] = {}
+        for message in self.messages:
+            profile = dict(message.sender_profile or {})
+            peer_id = profile.get("id") or message.sender_id
+            if not isinstance(peer_id, int) or peer_id == 0:
+                continue
+            username = str(profile.get("username") or message.sender_username or "") or None
+            profile.update(
+                {
+                    "id": peer_id,
+                    "name": str(profile.get("name") or message.sender_name or "Unknown"),
+                    "username": username,
+                    "url": profile_url(username, peer_id),
+                    "kind": str(profile.get("kind") or "user"),
+                }
+            )
+            profiles[str(peer_id)] = profile
+        return profiles
 
     def _render_history(self) -> str:
         ordered = sorted(self.messages, key=lambda item: (item.date, item.id))
@@ -262,7 +305,14 @@ class Renderer:
             return False
         return self.local(previous.date).date() == moment.date()
 
-    def _userpic(self, title: str, peer_id: int | None, url: str | None, *, extra_class: str = "") -> str:
+    def _userpic(
+        self,
+        title: str,
+        peer_id: int | None,
+        url: str | None,
+        *,
+        extra_class: str = "",
+    ) -> str:
         color = (abs(peer_id or 0) % 7) + 1
         initial = "?"
         for char in title.strip():
@@ -286,7 +336,7 @@ class Renderer:
             )
         classes = "pull_left userpic_wrap" + (f" {extra_class}" if extra_class else "")
         return (
-            f'<div class="{classes}">\n'
+            f'<div class="{classes}" data-profile-id="{_attr(str(peer_id or ""))}">\n'
             "\n"
             f"{block}"
             "\n"
@@ -313,7 +363,9 @@ class Renderer:
         parts.append("\n")
 
         if not joined:
-            parts.append('       <div class="from_name">\n')
+            parts.append(
+                f'       <div class="from_name" data-profile-id="{_attr(str(message.sender_id or ""))}">\n'
+            )
             if message.sender_url:
                 parts.append(
                     f'<a class="peer_link" href="{_attr(message.sender_url)}">'

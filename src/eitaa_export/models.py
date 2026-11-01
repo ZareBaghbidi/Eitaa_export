@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from typing import Any
 
 EITAA_PROFILE_BASE = "https://eitaa.com"
 
@@ -96,6 +97,7 @@ class Message:
     sender_name: str = ""
     sender_username: str | None = None
     sender_id: int | None = None
+    sender_profile: dict[str, Any] | None = None
     signature: str = ""
     html_text: str = ""
     plain_text: str = ""

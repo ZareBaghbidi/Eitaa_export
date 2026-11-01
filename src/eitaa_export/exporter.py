@@ -21,6 +21,7 @@ from .render import Renderer, format_duration
 from .text import render_text
 
 _ASSETS = Path(__file__).with_name("assets")
+_WEB_ASSETS = Path(__file__).with_name("web")
 
 
 @dataclass(slots=True)
@@ -35,6 +36,7 @@ class ExportOptions:
     since: datetime | None = None
     until: datetime | None = None
     timezone: str = "Asia/Tehran"
+    output_theme: str = "light"
     include_created: bool = True
     join_invite: bool = False
     quiet: bool = False
@@ -63,6 +65,13 @@ class EntityIndex:
         for chat in payload.get("chats") or []:
             if isinstance(chat, dict) and isinstance(chat.get("id"), int):
                 self.chats[chat["id"]] = chat
+        full_user = _obj(payload.get("full_user"))
+        full_users = _list(payload.get("users"))
+        about = _str(full_user.get("about"))
+        if about and full_users and isinstance(full_users[0], dict):
+            user_id = full_users[0].get("id")
+            if isinstance(user_id, int) and user_id in self.users:
+                self.users[user_id]["about"] = about
 
     def user(self, user_id: int | None) -> dict[str, Any] | None:
         return self.users.get(user_id) if isinstance(user_id, int) else None
@@ -184,7 +193,7 @@ def _input_peer_from_chat(chat: dict[str, Any]) -> dict[str, Any]:
 
 
 class Exporter:
-    """Export one Eitaa peer into a Telegram-style HTML archive."""
+    """Export one Eitaa peer into an offline HTML archive."""
 
     def __init__(
         self,
@@ -251,7 +260,7 @@ class Exporter:
 
         self.progress("Rendering messages...")
         self._copy_assets()
-        renderer = Renderer(chat, models, tz=self.tz)
+        renderer = Renderer(chat, models, tz=self.tz, theme=options.output_theme)
         (options.output / "messages.html").write_text(renderer.render(), encoding="utf-8")
         self._count_stats(models)
         return self.stats
@@ -490,6 +499,7 @@ class Exporter:
                 continue
 
             sender_name, sender_username, sender_id = self._sender(raw, chat)
+            sender_profile = self._sender_profile(raw, chat)
             forward = self._forward(raw)
             reply_to_id, other_chat = self._reply(raw, current_key)
             text = _str(raw.get("message"))
@@ -508,6 +518,7 @@ class Exporter:
                     sender_name=sender_name,
                     sender_username=sender_username,
                     sender_id=sender_id,
+                    sender_profile=sender_profile,
                     signature=_str(raw.get("post_author")),
                     html_text=html_text,
                     plain_text=text,
@@ -532,6 +543,37 @@ class Exporter:
         if _str(entity.get("_")) in {"user", "userEmpty"}:
             return _user_name(entity), _entity_username(entity), _int(entity.get("id"))
         return _entity_name(entity), _entity_username(entity), _int(entity.get("id"))
+
+    def _sender_profile(self, raw: dict[str, Any], chat: ChatInfo) -> dict[str, Any]:
+        if chat.is_broadcast:
+            return {
+                "id": chat.peer_id,
+                "name": chat.title,
+                "username": chat.username,
+                "about": chat.about,
+                "kind": chat.kind,
+            }
+        entity = _entity_from_peer(raw.get("from_id"), self.index)
+        if entity is None:
+            return {
+                "id": chat.peer_id,
+                "name": chat.title,
+                "username": chat.username,
+                "about": chat.about,
+                "kind": chat.kind,
+            }
+        is_user = _str(entity.get("_")) in {"user", "userEmpty"}
+        username = _entity_username(entity)
+        peer_id = _int(entity.get("id"))
+        return {
+            "id": peer_id,
+            "name": _user_name(entity) if is_user else _entity_name(entity),
+            "username": username,
+            "about": _str(entity.get("about")),
+            "kind": "user" if is_user else "chat",
+            "bot": bool(entity.get("bot")),
+            "verified": bool(entity.get("verified")),
+        }
 
     def _forward(self, raw: dict[str, Any]) -> ForwardInfo | None:
         forward = _obj(raw.get("fwd_from"))
@@ -674,6 +716,12 @@ class Exporter:
             destination = output / name
             if source.is_dir():
                 shutil.copytree(source, destination, dirs_exist_ok=True)
+        output_images = output / "images"
+        output_images.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(_WEB_ASSETS / "eitaa.svg", output_images / "eitaa.svg")
+        fonts = _WEB_ASSETS / "fonts"
+        if fonts.is_dir():
+            shutil.copytree(fonts, output / "fonts", dirs_exist_ok=True)
 
     def _count_stats(self, models: list[Message]) -> None:
         self.stats.messages = sum(1 for item in models if not item.is_service)

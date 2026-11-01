@@ -1,4 +1,4 @@
-"""Telegram-style HTML exporter for Eitaa chats, groups, and channels."""
+"""Offline HTML exporter for Eitaa chats, groups, and channels."""
 
 from .exporter import Exporter, ExportOptions
 from .models import ChatInfo, ExportStats, ForwardInfo, MediaInfo, Message

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="fa" dir="rtl" data-theme="light">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="dark light" />
+  <meta name="color-scheme" content="light dark" />
   <title>Eitaa Export</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <script>
     try {
-      document.documentElement.dataset.theme = localStorage.getItem("eitaa-theme") || "dark";
+      document.documentElement.dataset.theme = localStorage.getItem("eitaa-theme") || "light";
+      document.documentElement.lang = localStorage.getItem("eitaa-language") || "fa";
+      document.documentElement.dir = document.documentElement.lang === "fa" ? "rtl" : "ltr";
     } catch (error) {
-      document.documentElement.dataset.theme = "dark";
+      document.documentElement.dataset.theme = "light";
     }
   </script>
   <link rel="stylesheet" href="/static/style.css" />
 </head>
 <body>
   <svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <symbol id="i-logo" viewBox="0 0 24 24"><path d="M21.5 2.5 10.8 13.2"/><path d="M21.5 2.5 14.8 21.5l-4-8.3-8.3-4Z"/></symbol>
     <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></symbol>
     <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0-2.3 6.7"/><path d="M20 4v7h-7"/></symbol>
     <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></symbol>
@@ -54,33 +56,34 @@
     <aside class="sidebar">
       <header class="sidebar-top">
         <div class="brand">
-          <span class="brand-mark"><svg class="icon"><use href="#i-logo"></use></svg></span>
-          <span class="brand-name">eitaa<span>export</span></span>
+          <span class="brand-mark"><img class="brand-image" src="/favicon.svg" alt="Eitaa" /></span>
+          <span class="brand-name">Eitaa Export</span>
         </div>
         <div class="top-actions">
-          <button class="icon-btn" id="themeBtn" type="button" title="Toggle theme"></button>
-          <button class="avatar avatar-sm" id="profileBtn" type="button" title="Profile"></button>
+          <button class="language-btn" id="languageBtn" type="button" title="Switch language">EN</button>
+          <button class="icon-btn" id="themeBtn" type="button" title="تغییر تم"></button>
+          <button class="avatar avatar-sm" id="profileBtn" type="button" title="پروفایل"></button>
         </div>
       </header>
 
       <div class="search-wrap">
         <svg class="icon search-icon"><use href="#i-search"></use></svg>
-        <input id="searchInput" type="search" placeholder="Search chats" autocomplete="off" spellcheck="false" />
-        <button class="icon-btn tiny" id="refreshBtn" type="button" title="Refresh chats">
+        <input id="searchInput" type="search" placeholder="جست‌وجوی گفتگوها" autocomplete="off" spellcheck="false" />
+        <button class="icon-btn tiny" id="refreshBtn" type="button" title="تازه‌سازی گفتگوها">
           <svg class="icon"><use href="#i-refresh"></use></svg>
         </button>
       </div>
 
       <form class="sidebar-quick" id="sidebarQuickForm">
-        <input id="sidebarTarget" type="text" placeholder="Paste a link, @username, or ID" autocomplete="off" spellcheck="false" />
-        <button class="primary small" type="submit">Go</button>
+        <input id="sidebarTarget" type="text" placeholder="پیوند، @نام‌کاربری یا شناسه را وارد کنید" autocomplete="off" spellcheck="false" />
+        <button class="primary small" type="submit">برو</button>
       </form>
 
       <div class="chat-list" id="chatList" aria-live="polite"></div>
 
       <footer class="sidebar-footer">
         <button class="me-row" id="meRow" type="button"></button>
-        <button class="icon-btn" id="logoutBtn" type="button" title="Sign out">
+        <button class="icon-btn" id="logoutBtn" type="button" title="خروج">
           <svg class="icon"><use href="#i-logout"></use></svg>
         </button>
       </footer>
@@ -89,31 +92,32 @@
     <main class="main">
       <section class="view welcome" id="welcomeView">
         <div class="welcome-inner">
-          <div class="hero-orb"><svg class="icon"><use href="#i-logo"></use></svg></div>
-          <div class="eyebrow"><svg class="icon"><use href="#i-sparkles"></use></svg> Telegram-style archives for Eitaa</div>
-          <h1>Everything, saved<br /><span>exactly as it happened.</span></h1>
+          <div class="hero-orb"><img class="brand-image" src="/favicon.svg" alt="Eitaa" /></div>
+          <div class="eyebrow"><svg class="icon"><use href="#i-sparkles"></use></svg><span>آرشیو گفتگوهای ایتا</span></div>
+          <h1>گفتگوهایت را<br /><span>همیشه در دسترس نگه دار</span></h1>
           <p class="lede">
-            Choose a chat on the left — or paste any channel link, invite link, @username, or peer ID.
-            Pick the media you want, set a size limit, and watch every file download.
+            یک گفتگو را از فهرست انتخاب کن یا پیوند کانال، گروه، دعوت، نام کاربری یا شناسه را وارد کن.
+            پیام‌ها و رسانه‌های موردنیازت را انتخاب کن و روند ذخیره‌سازی را ببین.
           </p>
 
           <div class="quick-target">
             <svg class="icon"><use href="#i-link"></use></svg>
-            <input id="welcomeTarget" type="text" placeholder="https://eitaa.com/… or @channel" autocomplete="off" spellcheck="false" />
-            <button class="primary" id="welcomeTargetBtn" type="button">Continue</button>
+            <input id="welcomeTarget" type="text" placeholder="https://eitaa.com/… یا @channel" autocomplete="off" spellcheck="false" />
+            <button class="primary" id="welcomeTargetBtn" type="button">ادامه</button>
           </div>
 
           <div class="feature-grid">
-            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-photo"></use></svg></span><div><b>Every media type</b><small>Photos, video, voice, files, stickers and GIFs.</small></div></div>
-            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-download"></use></svg></span><div><b>Live file progress</b><small>A 0–100% bar for each file, plus an overall bar.</small></div></div>
-            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-folder"></use></svg></span><div><b>Telegram HTML</b><small>messages.html, css, js, photos and thumbnails.</small></div></div>
+            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-photo"></use></svg></span><div><b>همهٔ رسانه‌ها</b><small>عکس، ویدیو، صدا، فایل، استیکر و GIF</small></div></div>
+            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-download"></use></svg></span><div><b>نمایش روند ذخیره‌سازی</b><small>درصد پیشرفت هر فایل و کل خروجی</small></div></div>
+            <div class="feature"><span class="feature-icon"><svg class="icon"><use href="#i-folder"></use></svg></span><div><b>پیش‌نمایش کامل گفتگو</b><small>پیام‌ها، رسانه‌ها و اطلاعات فرستنده‌ها</small></div></div>
           </div>
+          <footer class="copyright">© <a href="https://github.com/zarebaghbidi" target="_blank" rel="noopener noreferrer">By AmirrimA</a></footer>
         </div>
       </section>
 
       <section class="view export-view" id="exportView" hidden>
         <header class="chat-header">
-          <button class="icon-btn back-btn" id="backBtn" type="button" title="Back">
+          <button class="icon-btn back-btn" id="backBtn" type="button" title="بازگشت">
             <svg class="icon"><use href="#i-arrow-left"></use></svg>
           </button>
           <div class="avatar" id="selAvatar"></div>
@@ -129,10 +133,10 @@
             <div class="target-line">
               <span class="target-icon"><svg class="icon"><use href="#i-link"></use></svg></span>
               <div class="target-copy">
-                <label for="targetInput">Export target</label>
+              <label for="targetInput">مقصد خروجی</label>
                 <input id="targetInput" type="text" spellcheck="false" autocomplete="off" />
               </div>
-              <button class="secondary small" id="resolveBtn" type="button">Check</button>
+              <button class="secondary small" id="resolveBtn" type="button">بررسی</button>
             </div>
             <div class="inline-note hidden" id="targetNote"></div>
 
@@ -140,22 +144,22 @@
               <section class="card">
                 <div class="card-head">
                   <div>
-                    <h3>What to export</h3>
-                    <p>Text messages are always included. Pick the media you need.</p>
+                    <h3>محتوای خروجی</h3>
+                    <p>پیام‌های متنی همیشه ذخیره می‌شوند. رسانه‌های موردنیاز را انتخاب کن.</p>
                   </div>
                   <div class="mini-actions">
-                    <button class="ghost tiny" id="selectAllTypes" type="button">All</button>
-                    <button class="ghost tiny" id="clearAllTypes" type="button">None</button>
+                    <button class="ghost tiny" id="selectAllTypes" type="button">همه</button>
+                    <button class="ghost tiny" id="clearAllTypes" type="button">هیچ‌کدام</button>
                   </div>
                 </div>
                 <div class="type-grid" id="typeGrid"></div>
               </section>
 
               <section class="card">
-                <div class="card-head"><div><h3>Limits</h3><p>Keep downloads small, or take everything.</p></div></div>
+                <div class="card-head"><div><h3>محدودیت‌ها</h3><p>حجم دریافت را کنترل کن یا همه‌چیز را ذخیره کن.</p></div></div>
                 <div class="field-grid">
                   <div class="field">
-                    <label for="maxFile">Max size per file</label>
+                    <label for="maxFile">بیشترین حجم هر فایل</label>
                     <div class="input-unit">
                       <input id="maxFile" type="number" min="0" step="1" value="0" />
                       <select id="maxFileUnit">
@@ -163,10 +167,10 @@
                         <option value="1073741824">GB</option>
                       </select>
                     </div>
-                    <small>0 = unlimited. Larger files are kept as placeholders.</small>
+                    <small>۰ یعنی بدون محدودیت. فایل‌های بزرگ‌تر فقط به‌صورت جای‌نگهدار ثبت می‌شوند.</small>
                   </div>
                   <div class="field">
-                    <label for="maxTotal">Total download budget</label>
+                    <label for="maxTotal">مجموع حجم دریافت</label>
                     <div class="input-unit">
                       <input id="maxTotal" type="number" min="0" step="1" value="0" />
                       <select id="maxTotalUnit">
@@ -174,43 +178,51 @@
                         <option value="1073741824">GB</option>
                       </select>
                     </div>
-                    <small>0 = unlimited. Remaining media is skipped, not failed.</small>
+                    <small>۰ یعنی بدون محدودیت. رسانه‌های اضافه رد می‌شوند.</small>
                   </div>
                   <div class="field">
-                    <label for="limitInput">Newest messages</label>
-                    <input id="limitInput" type="number" min="1" step="1" placeholder="All messages" />
-                    <small>Leave empty to fetch the complete history.</small>
+                    <label for="limitInput">تعداد پیام‌های آخر</label>
+                    <input id="limitInput" type="number" min="1" step="1" placeholder="همهٔ پیام‌ها" />
+                    <small>برای دریافت همهٔ پیام‌ها خالی بگذار.</small>
                   </div>
                   <div class="field">
-                    <label for="timezoneInput">Timezone</label>
+                    <label for="timezoneInput">منطقهٔ زمانی</label>
                     <input id="timezoneInput" type="text" value="Asia/Tehran" spellcheck="false" />
-                    <small>Used for dates and file names.</small>
+                    <small>برای تاریخ‌ها و نام فایل‌ها استفاده می‌شود.</small>
                   </div>
                 </div>
               </section>
 
               <section class="card">
-                <div class="card-head"><div><h3>Date range</h3><p>Optional. Leave blank for the full history.</p></div></div>
+                <div class="card-head"><div><h3>بازهٔ زمانی</h3><p>اختیاری؛ برای کل تاریخچه خالی بگذار.</p></div></div>
                 <div class="field-grid">
-                  <div class="field"><label for="sinceInput">From</label><input id="sinceInput" type="date" /></div>
-                  <div class="field"><label for="untilInput">To</label><input id="untilInput" type="date" /></div>
+                  <div class="field"><label for="sinceInput">از</label><input id="sinceInput" type="date" /></div>
+                  <div class="field"><label for="untilInput">تا</label><input id="untilInput" type="date" /></div>
                 </div>
               </section>
 
               <section class="card">
-                <div class="card-head"><div><h3>Options</h3><p>Fine-tune the archive.</p></div></div>
+                <div class="card-head"><div><h3>تنظیمات</h3><p>جزئیات خروجی را تنظیم کن.</p></div></div>
                 <div class="field">
-                  <label for="outputInput">Output folder</label>
-                  <input id="outputInput" type="text" spellcheck="false" placeholder="auto" />
-                  <small id="exportRootHint">Created inside your export root. Reusing a name resumes existing files.</small>
+                  <label for="outputInput">نام پوشهٔ خروجی</label>
+                  <input id="outputInput" type="text" spellcheck="false" placeholder="خودکار" />
+                  <small id="exportRootHint">پوشه داخل مسیر خروجی ساخته می‌شود. استفاده از نام قبلی فایل‌ها را ادامه می‌دهد.</small>
+                </div>
+                <div class="field output-theme-field">
+                  <label for="outputTheme">تم فایل خروجی</label>
+                  <select id="outputTheme">
+                    <option value="light">روشن</option>
+                    <option value="dark">تاریک</option>
+                  </select>
+                  <small>ظاهر صفحهٔ آرشیو را انتخاب کن.</small>
                 </div>
                 <label class="switch-row">
-                  <span><b>Add “created” event</b><small>Adds a service message at the channel creation date.</small></span>
+                  <span><b>افزودن رویداد ساخت</b><small>در تاریخ ایجاد کانال یا گروه یک پیام سیستمی درج می‌کند.</small></span>
                   <input id="createdInput" type="checkbox" checked />
                   <span class="switch"></span>
                 </label>
                 <label class="switch-row">
-                  <span><b>Join invite link if needed</b><small>Joins the group/channel before exporting.</small></span>
+                  <span><b>پیوستن به پیوند دعوت در صورت نیاز</b><small>پیش از خروجی گرفتن به گروه یا کانال می‌پیوندد.</small></span>
                   <input id="joinInput" type="checkbox" />
                   <span class="switch"></span>
                 </label>
@@ -220,7 +232,7 @@
                 <div class="estimate" id="estimate"></div>
                 <button class="primary large" id="startBtn" type="submit">
                   <svg class="icon"><use href="#i-download"></use></svg>
-                  Start export
+                  شروع خروجی
                 </button>
               </div>
             </form>
@@ -230,15 +242,15 @@
 
       <section class="view job-view" id="jobView" hidden>
         <header class="chat-header">
-          <button class="icon-btn back-btn" id="jobBackBtn" type="button" title="Back">
+          <button class="icon-btn back-btn" id="jobBackBtn" type="button" title="بازگشت">
             <svg class="icon"><use href="#i-arrow-left"></use></svg>
           </button>
           <div class="avatar" id="jobAvatar"></div>
           <div class="chat-head-info">
-            <h2 id="jobTitle">Export</h2>
+            <h2 id="jobTitle">خروجی</h2>
             <p id="jobSub">—</p>
           </div>
-          <span class="status-chip" id="jobStatus">Running</span>
+              <span class="status-chip" id="jobStatus">در حال انجام</span>
         </header>
 
         <div class="scroll-area">
@@ -266,7 +278,7 @@
             </div>
 
             <div class="job-card">
-              <div class="card-head"><div><h3>Activity</h3><p>History fetch, downloads, and rendering.</p></div></div>
+              <div class="card-head"><div><h3>گزارش فعالیت</h3><p>دریافت پیام‌ها، رسانه‌ها و ساخت آرشیو.</p></div></div>
               <div class="event-log" id="eventLog"></div>
             </div>
 
@@ -298,47 +310,47 @@
 
   <div class="overlay auth-overlay" id="authOverlay" hidden>
     <div class="auth-card">
-      <div class="auth-logo"><svg class="icon"><use href="#i-logo"></use></svg></div>
-      <h1>Sign in to Eitaa</h1>
-      <p class="auth-subtitle" id="authSubtitle">Use your phone number. Eitaa will send a verification code.</p>
+      <div class="auth-logo"><img class="brand-image" src="/favicon.svg" alt="Eitaa" /></div>
+      <h1>ورود به ایتا</h1>
+      <p class="auth-subtitle" id="authSubtitle">شمارهٔ تلفنت را وارد کن؛ کد تأیید از طرف ایتا ارسال می‌شود.</p>
 
       <form id="phoneForm" class="auth-step">
-        <label for="phoneInput">Phone number</label>
+        <label for="phoneInput">شمارهٔ تلفن</label>
         <div class="auth-input">
           <svg class="icon"><use href="#i-phone"></use></svg>
           <input id="phoneInput" type="tel" inputmode="tel" autocomplete="tel" placeholder="+989121234567" />
         </div>
-        <button class="primary full" id="phoneSubmit" type="submit">Continue</button>
+        <button class="primary full" id="phoneSubmit" type="submit">ادامه</button>
       </form>
 
       <form id="codeForm" class="auth-step" hidden>
         <div class="code-target" id="codeTarget"></div>
-        <label for="codeInput">Verification code</label>
+        <label for="codeInput">کد تأیید</label>
         <input id="codeInput" class="code-input" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="8" placeholder="•••••" />
-        <button class="primary full" id="codeSubmit" type="submit">Verify &amp; sign in</button>
+        <button class="primary full" id="codeSubmit" type="submit">تأیید و ورود</button>
         <div class="code-actions">
-          <button class="ghost" id="resendBtn" type="button">Resend code</button>
-          <button class="ghost" id="changePhoneBtn" type="button">Change number</button>
+          <button class="ghost" id="resendBtn" type="button">ارسال دوباره</button>
+          <button class="ghost" id="changePhoneBtn" type="button">تغییر شماره</button>
         </div>
       </form>
 
       <div class="auth-error" id="authError" hidden></div>
-      <div class="auth-foot"><svg class="icon"><use href="#i-lock"></use></svg> The session stays on this computer.</div>
+      <div class="auth-foot"><svg class="icon"><use href="#i-lock"></use></svg> نشست کاربری روی همین رایانه می‌ماند.</div>
     </div>
   </div>
 
   <div class="overlay" id="profileOverlay" hidden>
     <div class="modal profile-modal">
-      <button class="icon-btn modal-close" id="profileClose" type="button" title="Close"><svg class="icon"><use href="#i-x"></use></svg></button>
+      <button class="icon-btn modal-close" id="profileClose" type="button" title="بستن"><svg class="icon"><use href="#i-x"></use></svg></button>
       <div class="avatar avatar-xl" id="profileAvatar"></div>
       <h2 id="profileName">—</h2>
       <p class="profile-handle" id="profileUsername"></p>
       <div class="profile-rows">
-        <div class="profile-row"><span>Phone</span><b id="profilePhone">—</b></div>
-        <div class="profile-row"><span>Profile</span><b id="profileNameTag">—</b></div>
-        <div class="profile-row"><span>Session</span><b>Stored locally</b></div>
+        <div class="profile-row"><span>تلفن</span><b id="profilePhone">—</b></div>
+        <div class="profile-row"><span>نام نمایه</span><b id="profileNameTag">—</b></div>
+        <div class="profile-row"><span>نشست</span><b>ذخیره‌شده روی دستگاه</b></div>
       </div>
-      <button class="danger full" id="profileLogout" type="button"><svg class="icon"><use href="#i-logout"></use></svg> Sign out</button>
+      <button class="danger full" id="profileLogout" type="button"><svg class="icon"><use href="#i-logout"></use></svg> خروج از حساب</button>
     </div>
   </div>
 

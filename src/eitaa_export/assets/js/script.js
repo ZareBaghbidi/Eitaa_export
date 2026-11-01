@@ -1,6 +1,62 @@
 "use strict";
 
 window.AllowBackFromHistory = false;
+window.PeerProfiles = null;
+
+function ShowProfile(profileId) {
+    if (window.PeerProfiles === null) {
+        try {
+            window.PeerProfiles = JSON.parse(document.getElementById("peer_profiles")?.textContent || "{}");
+        } catch (error) {
+            window.PeerProfiles = {};
+        }
+    }
+    var profile = window.PeerProfiles[String(profileId)];
+    if (!profile) {
+        return true;
+    }
+    var name = document.getElementById("profile_name");
+    var username = document.getElementById("profile_username");
+    var about = document.getElementById("profile_about");
+    var avatar = document.getElementById("profile_avatar");
+    var kind = document.getElementById("profile_kind");
+    var id = document.getElementById("profile_id");
+    var badges = document.getElementById("profile_badges");
+    var open = document.getElementById("profile_open");
+    var initials = (profile.name || "?").trim().split(/\s+/).map(function (part) { return part.charAt(0); }).slice(0, 2).join("").toUpperCase();
+    name.textContent = profile.name || "کاربر ایتا";
+    username.textContent = profile.username ? "@" + profile.username : "نام کاربری عمومی ندارد";
+    about.textContent = profile.about || "";
+    about.hidden = !profile.about;
+    avatar.textContent = initials || "؟";
+    kind.textContent = profile.kind === "channel" ? "کانال" : profile.kind === "group" ? "گروه" : "کاربر";
+    id.textContent = "شناسه: " + profile.id;
+    badges.textContent = [profile.verified ? "تأییدشده" : "", profile.bot ? "ربات" : ""].filter(Boolean).join(" · ");
+    badges.hidden = !badges.textContent;
+    open.href = profile.url || "#";
+    open.hidden = !profile.url;
+    document.getElementById("profile_overlay").hidden = false;
+    return false;
+}
+
+function CloseProfile() {
+    var overlay = document.getElementById("profile_overlay");
+    if (overlay) overlay.hidden = true;
+}
+
+document.addEventListener("click", function (event) {
+    var link = event.target.closest(".peer_link, .userpic_link");
+    if (!link) return;
+    var owner = link.closest("[data-profile-id]");
+    if (owner && owner.dataset.profileId && ShowProfile(owner.dataset.profileId) === false) {
+        event.preventDefault();
+    }
+});
+
+document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape") CloseProfile();
+});
+
 function CheckLocation() {
     var start = "#go_to_message";
     var hash = location.hash;

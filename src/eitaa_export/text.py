@@ -1,4 +1,4 @@
-"""Telegram-compatible rich-text rendering for Eitaa message entities."""
+"""Rich-text rendering for Eitaa message entities."""
 
 from __future__ import annotations
 
@@ -76,7 +76,7 @@ def _tree(text: str, spans: list[Span]) -> _Node:
 
 
 def _escape(text: str, *, preformatted: bool = False) -> str:
-    # Telegram's exporter turns every newline into <br>, including inside <pre>.
+    # Preserve line breaks consistently, including inside preformatted text.
     del preformatted
     escaped = html.escape(text, quote=False)
     return escaped.replace("\r\n", "\n").replace("\r", "\n").replace("\n", "<br>")
@@ -212,7 +212,7 @@ def render_text(
     *,
     emoji_map: dict[int, str] | None = None,
 ) -> str:
-    """Render message text and TL entities as Telegram-style HTML."""
+    """Render message text and TL entities as HTML."""
 
     if not text:
         return ""

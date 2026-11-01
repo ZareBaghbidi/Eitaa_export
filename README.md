@@ -1,12 +1,10 @@
-# eitaa-export
+# Eitaa Export
 
 **English** | [فارسی](README.fa.md)
 
-Export the **complete history of an Eitaa channel, group, supergroup, or direct chat** into a
-Telegram-Desktop-style HTML archive: `messages.html`, `css/style.css`, `js/script.js`,
+Export the **complete history of an Eitaa channel, group, supergroup, or direct chat** into an
+offline HTML archive: `messages.html`, `css/style.css`, `js/script.js`,
 `photos/`, `video_files/`, `voice_messages/`, `files/`, and `stickers/`.
-
-![Export preview](docs/preview.png)
 
 The exporter is built on [`eitaa-cli`](https://github.com/MokhtariF1/eitaa-cli) and talks
 directly to Eitaa's TL-over-HTTPS web API. It does not use a browser, Selenium, or browser
@@ -17,20 +15,22 @@ cookies.
 ## Features
 
 - **Full history**, fetched page by page with resumable media downloads.
-- **Telegram-style UI**: date separators, service events, replies, forwards, author
+- **Readable archive UI**: date separators, service events, replies, forwards, author
   signatures, reactions (when the server provides them), rich text entities, code blocks,
   blockquotes, hashtags, mentions, and links.
 - **Media**: photos with thumbnails, videos, voice messages, audio, documents, GIFs, and
-  stickers. Telegram-compatible filenames such as
+  stickers. Media use consistent filenames such as
   `photo_1@19-08-2026_12-24-16.jpg` and `video_1@20-08-2026_18-24-45.mp4_thumb.jpg`.
 - **Per-file progress bars**: every download shows a 0→100% bar with size, speed, and ETA,
   plus an overall bar for the whole export.
-- **Clickable profiles**: sender names and avatars open the peer in Eitaa
-  (`https://eitaa.com/<username>`), with a numeric-ID fallback when no username is available.
+- **Profile previews**: click a sender name or avatar to see the profile details included with
+  the messages, then open the profile on Eitaa when a peer link is available.
 - **Invite links**: `https://eitaa.com/+…` and `https://eitaa.com/joinchat/…` are supported.
   Use `--join` if the account is not a member yet.
 - **Filters**: newest N messages, date ranges, text-only export, and sticker toggles.
-- **Telegram-style web GUI** with sign-in, chat list, media filters, size limits, and live progress.
+- **Eitaa Export web interface** with sign-in, chat list, media filters, size limits, and live progress.
+- **Persian and English interface**, a bundled Persian font, orange Eitaa branding, and separate
+  light or dark choices for the app and exported archive.
 - **English CLI** with clear errors and flood-wait guidance.
 - **Offline demo** and a test suite that do not require an Eitaa account.
 
@@ -46,6 +46,7 @@ export_<name>/
 ├── js/
 │   └── script.js
 ├── images/                  # UI icons, 1x and 2x
+├── fonts/                   # bundled Persian font and license
 ├── photos/
 │   ├── photo_1@19-08-2026_12-24-16.jpg
 │   └── photo_1@19-08-2026_12-24-16_thumb.jpg
@@ -128,8 +129,9 @@ eitaa-export gui
 ```
 
 This starts a local web app at **http://127.0.0.1:8765** and opens it in your
-browser. It is designed like Telegram Desktop: dark and light themes, a chat
-sidebar, a profile menu, and a focused export panel.
+browser. It uses Eitaa-inspired orange accents, a chat sidebar, a profile menu, and a focused
+export panel. Choose Persian or English, switch between light and dark themes, and set the
+archive's own appearance before exporting.
 
 - **Sign in from the browser** with your phone number and the one-time code.
   If a saved session exists, the app opens directly on your chats.
@@ -142,18 +144,8 @@ sidebar, a profile menu, and a focused export panel.
 - **Watch progress**: an overall bar plus a per-file bar with percentage, size,
   speed, and ETA. The job survives page refreshes while the server is running.
 - **Open the result** directly in the browser through the built-in archive route.
+- **Preview sender profiles** from the archive and set its light or dark appearance before export.
 - **Sign out** from the profile menu; the local session is removed.
-
-![GUI](docs/gui.png)
-
-<details>
-<summary>More screenshots</summary>
-
-![Sign in](docs/gui-login.png)
-
-![Live progress](docs/gui-progress.png)
-
-</details>
 
 Useful GUI options:
 
@@ -281,7 +273,7 @@ asyncio.run(main())
 1. Resolve the peer (username, link, invite link, or typed reference).
 2. Fetch `messages.getHistory` pages and collect users/chats seen in each response.
 3. Normalize messages, service events, text entities, forwards, replies, and attachments.
-4. Plan deterministic Telegram-compatible filenames and download media in chunks.
+4. Plan stable media filenames and download media in chunks.
 5. Render `messages.html` and copy the CSS, JS, and icon assets.
 
 ---
@@ -305,8 +297,8 @@ asyncio.run(main())
 - **Privacy:** an export contains private text and media. Store it securely.
 - **Responsibility:** export only chats you own or are authorized to access. You are
   responsible for complying with Eitaa's terms and with the rights of message authors.
-- **Not byte-identical to Telegram:** the archive reproduces Telegram Desktop's layout,
-  classes, and interactions, but it is an independent implementation.
+- **Archive appearance:** the exported page has a self-contained layout and can use either
+  the Eitaa-inspired light or dark color palette.
 
 ---
 

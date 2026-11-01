@@ -31,7 +31,7 @@ COMMANDS = {"export", "login", "chats", "gui", "version"}
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="eitaa-export",
-        description="Export Eitaa channels, groups, and chats as a Telegram-style HTML archive.",
+        description="Export Eitaa channels, groups, and chats as offline HTML archives.",
     )
     parser.add_argument("--version", action="version", version=f"eitaa-export {__version__}")
     subparsers = parser.add_subparsers(dest="command", metavar="COMMAND")
@@ -92,7 +92,7 @@ def _build_parser() -> argparse.ArgumentParser:
     gui = subparsers.add_parser(
         "gui",
         help="Open the graphical web interface",
-        description="Start a local Telegram-style web UI for login, chats, and exports.",
+        description="Start a local web interface for login, chats, and exports.",
     )
     gui.add_argument("--host", default="127.0.0.1", help="Bind address (default: 127.0.0.1)")
     gui.add_argument("--port", type=int, default=8765, help="Port (default: 8765; 0 picks a free port)")
